@@ -72,6 +72,7 @@ function calculate() {
         }
         if (closest) {
             finder.found = targets[closest];
+            finder.foundDist = dist;
             usedTargets.push(closest);
         }
     }
@@ -79,7 +80,7 @@ function calculate() {
     let str = `Atakujący -> Cel`;
     for (let attacker of attackers) {
         if (attacker.found !== undefined) {
-            str += `\n${attacker.x}|${attacker.y} -> ${attacker.found.x}|${attacker.found.y}`;
+            str += `\n${attacker.x}|${attacker.y} -> ${attacker.found.x}|${attacker.found.y} (${Math.round(attacker.foundDist*100)/100})`;
         }
     }
     dom.result.innerHTML = str;
