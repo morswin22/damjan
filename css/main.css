@@ -9,18 +9,35 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
 }
 
-body textarea {
+body .input, body .output {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 30vh;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: height 300ms ease;
+  transition: height 300ms ease;
+}
+
+body .input.active, body .output.active {
+  height: 70vh;
+}
+
+body .input textarea, body .output textarea {
   margin: 0 50px;
   width: 300px;
-  height: 750px;
+  height: 75%;
   padding: 5px;
   resize: none;
 }
