@@ -41,4 +41,87 @@ body .input textarea, body .output textarea {
   padding: 5px;
   resize: none;
 }
+
+body #show-chart {
+  display: none;
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-image: url("/img/chart.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+body #show-chart.activated {
+  display: block;
+  -webkit-animation: shadow-drop-2-br 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: shadow-drop-2-br 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes shadow-drop-2-br {
+  0% {
+    -webkit-transform: translateZ(0) translateX(0) translateY(0);
+            transform: translateZ(0) translateX(0) translateY(0);
+    -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+    -webkit-transform: translateZ(50px) translateX(-12px) translateY(-12px);
+            transform: translateZ(50px) translateX(-12px) translateY(-12px);
+    -webkit-box-shadow: 12px 12px 20px -12px rgba(0, 0, 0, 0.35);
+            box-shadow: 12px 12px 20px -12px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@keyframes shadow-drop-2-br {
+  0% {
+    -webkit-transform: translateZ(0) translateX(0) translateY(0);
+            transform: translateZ(0) translateX(0) translateY(0);
+    -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+    -webkit-transform: translateZ(50px) translateX(-12px) translateY(-12px);
+            transform: translateZ(50px) translateX(-12px) translateY(-12px);
+    -webkit-box-shadow: 12px 12px 20px -12px rgba(0, 0, 0, 0.35);
+            box-shadow: 12px 12px 20px -12px rgba(0, 0, 0, 0.35);
+  }
+}
+
+body #chart {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 1200px;
+  height: 700px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
+
+body #chart.shown {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+body #chart > div {
+  padding: 50px 25px;
+  width: 550px;
+  height: 600px;
+}
+
+body #chart span {
+  position: relative;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
 /*# sourceMappingURL=main.css.map */

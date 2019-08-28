@@ -3,7 +3,9 @@ const dom = {
     target: document.querySelector('#target'),
     result1st: document.querySelector('#result1st'),
     result2st: document.querySelector('#result2st'),
-    result3st: document.querySelector('#result3st')
+    result3st: document.querySelector('#result3st'),
+    show: document.querySelector('#show-chart'),
+    close: document.querySelector('#chart span')
 };
 
 const update = e => {
@@ -13,15 +15,33 @@ const update = e => {
         calculate1st(); // Info
         calculate2st(); // Old
         calculate3st(); // Reversed
+        dom.show.classList.add('activated');
     }
 }
 dom.attack.addEventListener('change',update);
 dom.target.addEventListener('change',update);
+dom.show.addEventListener('click', e=>{
+    let elt = document.querySelector('.shown');
+    if (elt === null) {
+        document.querySelector('#chart').classList.add('shown');
+        drawChart();
+    } else {
+        elt.classList.remove('shown');
+    }
+});
+dom.close.addEventListener('click', e=>{
+    document.querySelector('#chart').classList.remove('shown');
+})
 
 const data = {
     attackers: [],
     targets: []
 };
+
+const dists = {
+    first: [],
+    second: []
+}
 
 function getData() {
     let targets = [];
@@ -138,6 +158,7 @@ function calculate2st() {
     for (let attacker of attackers) {
         if (attacker.found !== undefined) {
             str += `\n${attacker.x}|${attacker.y} -> ${attacker.found.x}|${attacker.found.y} (${ns(attacker.foundDist,2)})`;
+            dists.first.push(attacker.foundDist)
         }
     }
     str += `\n\nNajmniejszy dystans: ${ns(Math.min(...distances),2)}`;
@@ -182,6 +203,7 @@ function calculate3st () {
     for (let attacker of attackers) {
         if (attacker.found !== undefined) {
             str += `\n${attacker.x}|${attacker.y} -> ${attacker.found.x}|${attacker.found.y} (${ns(attacker.foundDist,2)})`;
+            dists.second.push(attacker.foundDist)
         }
     }
     str += `\n\nNajmniejszy dystans: ${ns(Math.min(...distances),2)}`;
@@ -205,3 +227,51 @@ function calculate3st () {
 // }).then(res=>res.text())
 
 // /^(\d+)\. Wyślij atak \(Taran\) z wioski (\d\d\d)\|(\d\d\d) na wioskę (\d\d\d)\|(\d\d\d)/gm
+
+let chart1 = undefined,
+    chart2 = undefined;
+
+function drawChart() {
+    let labels = [];
+    let data1st = [];
+    let data2nd = [];
+    for (let i in data.attackers) {
+        labels.push(`${data.attackers[i].x}|${data.attackers[i].y}`);
+        data1st.push(dists.first[i]);
+        data2nd.push(dists.second[i]);
+    }
+
+    let maxY = Math.max(...data1st.concat(data2nd));
+
+    if (chart1) chart1.destroy();
+    chart1 = new Chart(document.querySelector('#chart canvas.first').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Dystans',
+                data: data1st,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,scales: {yAxes: [{ticks: {beginAtZero: true,max: maxY}}]}}
+    });
+
+    if (chart2) chart2.destroy();
+    chart2 = new Chart(document.querySelector('#chart canvas.second').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Dystans',
+                data: data2nd,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,scales: {yAxes: [{ticks: {beginAtZero: true,max: maxY}}]}}
+    });
+}

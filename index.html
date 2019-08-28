@@ -1,90 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Planer ataków</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
 </head>
 <body>
     
     <div class="input active">
-        <textarea id="attack" placeholder="Atakujący">583|476
-536|485
-559|478
-547|487
-526|440
-532|489
-524|496
-556|465
-511|473
-512|438
-501|456
-545|499
-514|476
-535|490
-524|434		
-512|455
-576|510
-510|452
-561|434
-498|436
-494|429
-562|486
-576|514	
-504|449
-556|479
-526|484
-559|468
-573|491
-557|502
-</textarea><!--533|455-->
-        <textarea id="target" placeholder="Cele">[b]Cele burzenia:[/b]
-[spoiler=29]
-POŁUDNIE-12:
-576|488: Atak
-566|486: Atak
-575|488: Atak
-579|491: Atak
-564|495: Atak
-563|482: Atak
-567|503: Atak
-568|497: Atak
-578|490: Atak
-557|486: Atak
-569|504: Atak
-578|493: Atak
-
-CENTRUM-9:
-517|471: Atak
-521|453: Atak
-540|455: Atak
-529|451: Atak
-522|453: Atak
-521|466: Atak
-539|457: Atak
-534|459: Atak
-541|437: Atak
-
-PÓŁNOC-8: 
-533|447: Atak
-514|446: Atak
-517|444: Atak
-536|435: Atak
-525|437: Atak
-513|444: Atak
-537|435: Atak
-518|445: Atak
-[/spoiler]</textarea>
+        <textarea id="attack" placeholder="Atakujący"></textarea>
+        <textarea id="target" placeholder="Cele"></textarea>
     </div>
     <div class="output">
         <textarea id="result1st" placeholder="Atakujący - Min / Śre / Max"></textarea>
         <textarea id="result2st" placeholder="Atakujący -> Cel (dystans)"></textarea>
         <textarea id="result3st" placeholder="Atakujący -> Cel (dystans)"></textarea>
     </div>
+
+    <span id="show-chart"></span>
     
+    <div id="chart">
+        <div><canvas class="first"></canvas></div>
+        <div><canvas class="second"></canvas></div>
+        <span>x</span>
+    </div>
+
     <script src="js/layout.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 </body>
 </html>
