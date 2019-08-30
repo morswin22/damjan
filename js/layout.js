@@ -1,18 +1,12 @@
-const body = document.querySelector('body');
-let inputActive = true;
-const deactivate = () => {
-    body.querySelector('.active').classList.remove('active');
-    inputActive = !inputActive;
-};
-const swapDOM = (percent) => {
-    if (inputActive && percent > 0.7) {
-        deactivate();
-        body.querySelector('.output').classList.add('active');
-    }
-    if (!inputActive && percent < 0.3) {
-        deactivate();
-        body.querySelector('.input').classList.add('active');
-    }
-}
+const inputs = document.querySelectorAll('input[type=radio]');
+let selectedOutput = 'alg2';
 
-body.addEventListener('click',e=>swapDOM(e.clientY / body.clientHeight));
+inputs.forEach(e=>{
+	e.addEventListener('change', event=>{
+        let active = document.querySelector('label.active');
+        if (active) active.classList.remove('active');
+        event.target.parentElement.classList.add('active');
+        selectedOutput = event.target.value;
+        drawResult();
+  });
+});

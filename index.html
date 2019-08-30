@@ -10,26 +10,35 @@
 </head>
 <body>
     
-    <div class="input active">
-        <textarea id="attack" placeholder="Atakujący"></textarea>
-        <textarea id="target" placeholder="Cele"></textarea>
-    </div>
-    <div class="output">
-        <textarea id="result1st" placeholder="Atakujący - Min / Śre / Max"></textarea>
-        <textarea id="result2st" placeholder="Atakujący -> Cel (dystans)"></textarea>
-        <textarea id="result3st" placeholder="Atakujący -> Cel (dystans)"></textarea>
+    <div class="wrapper">
+
+        <div>
+            <textarea id="setA" class="input" placeholder="Wioski atakujące"></textarea>
+            <textarea id="setB" class="input" placeholder="Cele"></textarea>
+        </div>
+
+        <div>
+            <textarea class="output" placeholder="Atakujący → Cel (dystans)"></textarea>
+            <label><input type="radio" name="algorithm" value="alg1">Pierwszy Algorytm</label>
+            <label class="active"><input type="radio" name="algorithm" value="alg2" checked>Drugi Algorytm</label>
+        </div>
+
+        <div>
+            <div id="map">
+                <input type="range" orient="vertical" min="0" max="2" step="0.01" value="0.6">
+            </div>
+            <div class="outer-alg">
+                <div class="alg"><canvas id="alg1"></canvas></div>
+                <div class="alg"><canvas id="alg2"></canvas></div>
+            </div>
+        </div>
+
     </div>
 
-    <span id="show-chart"></span>
-    
-    <div id="chart">
-        <div><canvas class="first"></canvas></div>
-        <div><canvas class="second"></canvas></div>
-        <span>x</span>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js" integrity="sha256-WVsM3xrcqyuFNF3W1qtIKbHFsD0977nDQA8DCMp1zCw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
     <script src="js/layout.js"></script>
     <script src="js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="js/sketch.js"></script>
 </body>
 </html>
