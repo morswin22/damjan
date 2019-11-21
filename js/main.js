@@ -47,7 +47,7 @@ function drawResult() {
 
 function getData(textarea, output) {
     let elements = [];
-    let m, r = /^(\d+)\|(\d+).*$/gm;
+    let m, r = /(\d+)\|(\d+)/gm;
     let str = '';
     while((m = r.exec(textarea.value)) !== null) {
         let obj = {
