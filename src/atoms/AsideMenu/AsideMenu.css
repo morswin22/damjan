@@ -1,0 +1,74 @@
+aside {
+  display: grid;
+  grid-auto-rows: 1fr 1fr;
+  grid-auto-columns: auto;
+
+  padding: 15px 0;
+}
+
+aside .item {
+  display: grid;
+  grid-auto-rows: 65px auto;
+  grid-auto-columns: auto;
+}
+
+aside .item .title {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 15px;
+}
+
+aside .item .title span {  
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+aside .item .title a:hover img {
+  filter: 
+    invert(90%) 
+    sepia(98%) 
+    saturate(4108%) 
+    hue-rotate(341deg) 
+    brightness(72%) 
+    contrast(108%);
+}
+
+aside .item .empty {
+  align-self: center;
+  text-align: center;
+
+  line-height: 160%;
+  color: #7F7F7F;
+}
+
+aside .item ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+aside .item ul a:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+aside .item ul a li {
+  height: 38px;
+  line-height: 38px;
+  background-color: #595959;
+  font-size: 18px;
+  text-align: center;
+  transition: background-color 200ms ease-in-out;
+}
+
+aside .item ul a:nth-child(even) li {
+  background-color: #707070;
+}
+
+aside .item ul a li.active {
+  background-color: #840017;
+}
