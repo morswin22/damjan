@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import ReactTooltip from 'react-tooltip'
 
 import { StoreContext } from "../../organisms/Store";
 
@@ -17,12 +18,27 @@ class Action extends React.Component {
   constructor(props) {
     super(props);
 
-    this.ffdom = React.createRef();
+    this.state = {
+      cfCopied: false,
+      ffCopied: false,
+    }
+
     this.algorithms = new Algorithms();
   }
-
+  
   static contextType = StoreContext;
   
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.cfCopied !== this.state.cfCopied && this.state.cfCopied === true) {
+      ReactTooltip.hide();
+      this.cfCopy.showTooltip({currentTarget: this.cfCopyImg});
+    }
+    if (prevState.ffCopied !== this.state.ffCopied && this.state.ffCopied === true) {
+      ReactTooltip.hide();
+      this.ffCopy.showTooltip({currentTarget: this.ffCopyImg});
+    }
+  }
+
   render() {
     const { match } = this.props;
     const { store } = this.context;
@@ -96,8 +112,20 @@ class Action extends React.Component {
             <img 
               src={copy} alt="copy"
               target="cf"
-              onClick={()=>{copyTextToClipboard(cf)}}
-              title="Skopiuj do schowka"
+              onClick={()=>{copyTextToClipboard(cf, this, 'cfCopied')}}
+              data-tip
+              data-for="cfTip"
+              ref={(node) => this.cfCopyImg = node}
+              onMouseLeave={()=>{
+                this.setState({cfCopied: false});
+              }}
+              />
+            <ReactTooltip 
+              id='cfTip' 
+              ref={(node) => this.cfCopy = node}
+              type={this.state.cfCopied ? 'success' : 'dark'} 
+              effect='solid' 
+              getContent={() => this.state.cfCopied ? <span>Skopiowano</span> : <span>Skopiuj do schowka</span>} 
             />
           </div>
           <div className="summary">
@@ -143,8 +171,20 @@ class Action extends React.Component {
             <img 
               src={copy} alt="copy"
               target="ff"
-              onClick={()=>{copyTextToClipboard(ff)}}
-              title="Skopiuj do schowka"
+              onClick={()=>{copyTextToClipboard(ff, this, 'ffCopied')}}
+              data-tip
+              data-for="ffTip"
+              ref={(node) => this.ffCopyImg = node}
+              onMouseLeave={()=>{
+                this.setState({ffCopied: false});
+              }}
+              />
+            <ReactTooltip 
+              id='ffTip' 
+              ref={(node) => this.ffCopy = node}
+              type={this.state.ffCopied ? 'success' : 'dark'} 
+              effect='solid' 
+              getContent={() => this.state.ffCopied ? <span>Skopiowano</span> : <span>Skopiuj do schowka</span>} 
             />
           </div>
           <div className="summary">
