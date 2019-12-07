@@ -6,6 +6,7 @@ import warning from './Warning.png';
 import ReactResizeDetector from 'react-resize-detector';
 import { confirmAlert } from 'react-confirm-alert';
 import './RemoveAlert.css';
+import ReactTooltip from 'react-tooltip';
 
 import { StoreContext } from "../../organisms/Store";
 
@@ -99,6 +100,10 @@ class EditAction extends React.Component {
       }
     });
   }
+
+  componentDidUpdate() {
+    ReactTooltip.rebuild();
+  }
   
   render() {
     const { name, attackersValue, targetsValue } = this.state;
@@ -157,14 +162,14 @@ class EditAction extends React.Component {
             <span className="info">Nieużytych atakujących</span>
             <span className="number">
               {unusedAtt}
-              {(unusedAtt > 0 ? <img src={warning} alt="!" title="Tyle wiosek nie zaatakuje przeciwnika" /> : null)}
+              {(unusedAtt > 0 ? <img data-tip="Tyle wiosek nie zaatakuje przeciwnika" data-for="infoTooltip" src={warning} alt="!" /> : null)}
             </span>
           </div>
           <div className="label">
             <span className="info">Nieużytych broniących</span>
             <span className="number">
               {unusedTar}
-              {(unusedTar > 0 ? <img src={warning} alt="!" title="Tyle wiosek nie będzie zaatakowanych" /> : null)}
+              {(unusedTar > 0 ? <img data-tip="Tyle wiosek nie będzie zaatakowanych" data-for="infoTooltip" src={warning} alt="!" /> : null)}
             </span>
           </div>
         </div>
@@ -172,6 +177,13 @@ class EditAction extends React.Component {
           <p>Planer ataków posiada dwa algorytmy, które pozwalają obliczyć skuteczne strategie ataku na przeciwnika</p>
           <input type="submit" value="OBLICZ STRATEGIE"/>
         </div>
+        <ReactTooltip 
+          place="top"
+          type="dark"
+          effect="solid" 
+          id='infoTooltip' 
+          getContent={(dataTip) => <span>{dataTip}</span>}
+        />
       </form>
     );
   }
