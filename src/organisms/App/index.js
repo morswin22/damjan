@@ -13,6 +13,7 @@ import {AsideMenu, AsideActionsMenu} from "../../atoms/AsideMenu";
 // pages
 import Home from '../../particles/Home';
 import NewAction from "../../particles/NewAction";
+import EditAction from "../../particles/EditAction";
 import Action from "../../particles/Action";
 import Map from '../../particles/Map';
 
@@ -101,7 +102,7 @@ function App() {
             <Map />
           </Route>
           <Route path="/akcja/:id/edytuj">
-            Edytuj
+            <EditAction />
           </Route>
           <Route path="/akcja/:id">
             <Action />
