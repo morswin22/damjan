@@ -1,0 +1,139 @@
+#editAction {
+  margin: 0;
+
+  display: grid;
+  height: 100%;
+  grid-template-areas: 
+    "name remove"
+    "data summary"
+    "data submit";
+  grid-template-rows: 140px 1fr 1fr;
+  grid-template-columns: 900px auto;
+}
+
+#editAction .name {
+  grid-area: name;
+}
+
+#editAction .name input[type=text] {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #7F7F7F;
+  height: 60px;
+  line-height: 60px;
+  color: #E5E5E5;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+#editAction .name input[type=text]::placeholder {
+  color: #7F7F7F;
+}
+
+#editAction .data {
+  grid-area: data;
+}
+
+#editAction .data textarea {
+  width: 400px;
+  height: calc(100% - 46px);
+  background: #595959;
+  border-radius: 5px;
+  border: none;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: none;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+}
+
+#editAction .data textarea:nth-of-type(1) {
+  margin-right: 50px;
+}
+
+#editAction .data textarea::placeholder {
+  color: #3F3F3F;
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  line-height: var(--h);
+}
+
+#editAction .summary {
+  grid-area: summary;
+  justify-self: center;
+}
+
+#editAction .summary .label {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 45px;
+}
+
+#editAction .summary .label .info {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+#editAction .summary .label .number {
+  font-weight: 700;
+  font-size: 30px;
+  min-width: 40px;
+  text-align: center;
+  position: relative;
+}
+
+#editAction .summary .label .number img {
+  position: absolute;
+  right: -70%;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+#editAction .submit {
+  grid-area: submit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#editAction .submit p {
+  font-size: 18px;
+  line-height: 130%;
+  width: 390px;
+}
+
+#editAction .submit input[type=submit] {
+  font-size: 18px;
+  font-weight: 700;
+  width: 215px;
+  height: 67px;
+  line-height: 67px;
+  text-align: center;
+  background-color: #840017;
+  border-radius: 12px;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+#editAction .remove {
+  grid-area: remove;
+  justify-self: center;
+  align-self: center;
+}
+
+#editAction .remove button {
+	border: 2px solid #840017;
+	background-color: transparent;
+  cursor: pointer;
+  color: #840017;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 7px;
+}

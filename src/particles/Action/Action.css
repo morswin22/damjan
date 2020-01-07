@@ -1,0 +1,148 @@
+#action {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr 1fr;
+  justify-items: center;
+  position: relative;
+  height: 100%;
+}
+
+#action .container {
+  height: 100%;
+}
+
+#action .header {
+  height: 93px;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+}
+
+#action .output {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+#action .scrollbar {
+  width: 540px;
+  height: 200px;
+  border-radius: 5px;
+}
+
+#action .scrollbar .text {
+  white-space: pre-line;
+  width: 540px;
+  background: #595959;
+  resize: none;
+  border: none;
+  margin-bottom: -5px;
+  box-sizing: border-box;
+  padding: 7px 42px 7px 7px ;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  min-height: 200px;
+}
+
+#action .output img {
+  position: absolute;
+  width: 21px;
+  height: 26px;
+  top: 7px;
+  right: 12px;
+  cursor: pointer;
+}
+
+#action .summary {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 330px auto;
+  margin-bottom: 30px;
+}
+
+#action .summary .label {
+  width: 330px;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#action .summary .label .info {
+  height: 45px;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+#action .summary .label .number {
+  width: 86.49px;
+  height: 45px;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#action .summary figure {
+  justify-self: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#action .summary figure img {
+  width: 92px;
+  height: 76px;
+  margin-bottom: 12px;
+}
+
+#action .summary figure figcaption {
+  text-align: center;
+  height: 40px;
+  font-size: 18px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#action .summary figure figcaption a {
+  color: #5FBEFF;
+}
+
+#action .summary figure figcaption a:hover {
+  text-decoration: underline;
+}
+
+#action .navbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 30px;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+#action .navbar img {
+  height: 18px;
+  width: 18px;
+  margin-left: 16px;
+}
+
+#action .chart {
+  height: 200px;
+}

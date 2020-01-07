@@ -1,0 +1,27 @@
+#map {
+	height: 100%;
+	background-color: #8bc34a;
+	padding: 18px 32px;
+	margin: -18px -32px;
+	overflow: hidden;
+	position: relative;
+}
+
+#map .navbar {
+	position: absolute;
+	top: 18px;
+	right: 32px;
+	height: 30px;
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 17px;
+	display: flex;
+	align-items: center;
+	text-transform: uppercase;
+}
+
+#map .navbar img {
+	height: 18px;
+	width: 18px;
+	margin-left: 16px;
+}
