@@ -16,6 +16,7 @@ import NewAction from "../../particles/NewAction";
 import EditAction from "../../particles/EditAction";
 import Action from "../../particles/Action";
 import Map from '../../particles/Map';
+import WillBeAdded from '../../particles/WillBeAdded'
 
 import message from './Message.png';
 import plan from './Plan.png';
@@ -89,7 +90,7 @@ function App() {
             akcje
           </Route>
           <Route path="/wiadomosci">
-            wiadomosci
+            <WillBeAdded version="3" />
           </Route>
           <Route path="/dane">
             <Data />
@@ -106,6 +107,10 @@ function App() {
           </Route>
           <Route path="/akcja/:id">
             <Action />
+          </Route>
+          
+          <Route path="/nowe-wiadomosci">
+            <WillBeAdded version="3" />
           </Route>
         </Switch>
       </main>
