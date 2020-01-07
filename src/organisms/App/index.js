@@ -15,6 +15,7 @@ import Home from '../../particles/Home';
 import NewAction from "../../particles/NewAction";
 import EditAction from "../../particles/EditAction";
 import Action from "../../particles/Action";
+import Actions from "../../particles/Actions";
 import Map from '../../particles/Map';
 import WillBeAdded from '../../particles/WillBeAdded'
 
@@ -87,7 +88,7 @@ function App() {
             <Home />
           </Route>
           <Route path="/akcje">
-            akcje
+            <Actions />
           </Route>
           <Route path="/wiadomosci">
             <WillBeAdded version="3" />
