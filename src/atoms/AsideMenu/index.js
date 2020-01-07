@@ -48,7 +48,9 @@ class AsideActionsMenuClass extends AsideMenu {
   getItems = () => {
     const actions = this.context.store.getActions();
     const items = [];
+    const itemsMax = 8;
     for (let i in actions) {
+      if (i >= itemsMax) break;
       const name = actions[i].name || '(Brak nazwy)';
       const urlParam = this.props.location.pathname.match(/\/akcja\/(\d+)/);
       const active = (urlParam && i === urlParam[1]) ? 'active' : null;
