@@ -25,15 +25,10 @@ body {
     
     animation: scale-up-bottom 0.7s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
         
-    /* & > div > * {
-      animation: fade-in 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.7s both;
-    } */
-
     display: grid;
     grid-template-areas:
-      "header navbar user"
-      "router router router";
-    grid-template-columns: 45rem 4fr 1fr;
+      "header"
+      "router";
     grid-template-rows: 7.7rem auto;
     grid-row-gap: .2rem;
 
@@ -67,6 +62,11 @@ body {
   100% {
     opacity: 1;
   }
+}
+
+.toast {
+  font-size: 1.8rem;
+  font-family: 'Montserrat', sans-serif!important;
 }
 
 `;

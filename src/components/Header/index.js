@@ -1,21 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Styled = styled.div`
-    grid-area: header;
+import Logo from '../Logo';
+import Navbar from '../Navbar';
 
-    font-size: 2.4rem;
-    line-height: 7.7rem;
-    text-align: center;
-    text-transform: uppercase;
+const Bar = styled.div`
+  grid-area: header;
 
-    color: ${({ theme }) => theme.color.primary };
+  line-height: 7.7rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 45rem auto;
+  grid-auto-rows: 7.7rem;
+
+  color: ${({ theme }) => theme.color.primary };
 `;
 
 const Header = () => (
-    <Styled>
-        Plemiona: Planer ataków
-    </Styled>
+  <Bar>
+    <Logo />
+    <Navbar />
+  </Bar>
 )
 
 export default Header;

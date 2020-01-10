@@ -2,33 +2,33 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './theme/theme';
 import GlobalStyle from './theme/GlobalStyle';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import { ROUTES } from './utils/routes';
+import history from './components/History';
+import { withAuthentication } from './components/Session';
 import Header from './components/Header';
 import Content from './components/Content';
-import Navbar from './components/Navbar';
-import User from './components/User';
+
+import SignIn from './views/SignIn';
+import Account from './views/Account';
+
+toast.configure()
 
 const App = () => (
   <ThemeProvider theme={theme}>
     <GlobalStyle />
-    <Router>
+    <Router history={history}>
       <Header /> 
-      <Navbar />
-      <User />
       <Content>
         <Switch>
-          <Route exact path={ROUTES.home}>
-            <button onClick={()=>{document.getElementById('root').style.columnGap = '.2rem'}}>Click me!</button>
-          </Route>
+          <Route exact path={ROUTES.home} component={SignIn} />
+          <Route exact path={ROUTES.user} component={Account} />
         </Switch>
       </Content>
     </Router>
   </ThemeProvider>
 );
 
-export default App;
+export default withAuthentication(App);
