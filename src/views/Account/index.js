@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { FirebaseContext } from '../../components/Firebase';
-// import history from '../../components/History';
-// import { toast } from 'react-toastify';
+import history from '../../components/History';
+import { toast } from 'react-toastify';
 import { AuthUserContext } from '../../components/Session';
+import ContentEditable from 'react-contenteditable'
 
 const Wrapper = styled.div`
   display: flex;
@@ -38,6 +39,7 @@ const Body = styled.div`
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 12.5rem auto;
+  grid-gap: .5rem;
 
 `;
 
@@ -54,11 +56,178 @@ const MenuItem = styled.a`
   }
 `;
 
+const Content = styled.div`
+  label {
+    display: block;
+    font-weight: 700;
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+    margin-top: 2rem;
+
+    &:first-of-type {
+      margin-top: 1rem;
+    }
+  }
+  div {
+    display: inline-block;
+    font-size: 1.8rem;
+    line-height: 3.5rem;
+    border-bottom: 1px solid #ffffff;
+    min-width: 1rem;
+
+    transition: border-bottom-color 200ms ease-in-out;
+
+    &:focus {
+      outline: none;
+      border-bottom-color: #c68062;
+    }
+  }
+  button {
+    /* background-color: #cb8b66; */
+    background-color: #c68062;
+    width: 15rem;
+    height: 3rem;
+    border: none;
+    margin-right:100%;
+    border-radius: .4rem;
+    margin-top: 2.5rem;
+    /* color: #000000; */
+    color: #fff;
+    font-size: 1.4rem;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px 0px #c68062;
+    transition: box-shadow 200ms ease-in-out;
+
+    &:not(:disabled):hover {
+      box-shadow: 0px 0px 0px 1px #c68062;
+    }
+  }
+  input {
+    width: 15rem;
+    height: 3rem;
+    border: none;
+    margin-right:100%;
+    border-radius: .4rem;
+    margin-bottom: 1rem;
+    padding: .5rem;
+    background-color: #656565;
+    color: #fff;
+
+    & + button {
+      margin-top: .6rem;
+      background-color: #6C833A;
+      box-shadow: 0px 0px 0px 0px #91B04F;
+
+      &:disabled {
+        background-color: #646D50;
+      }
+
+      &:not(:disabled):hover {
+        box-shadow: 0px 0px 0px 1px #91B04F;
+      }
+    }
+  }
+`;
+
+const toastData = {
+  className: 'toast',
+  position: "top-right",
+  autoClose: 3000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
+};
+
 const General = ({firebase, user}) => {
-  return null;
+  const nameContainer = useRef(null);
+  const [name, setName] = useState('user.name');
+
+  // TODO: change in firebase for both
+  const handleName = (event) => setName(event.target.value.trim());
+  const fixName = () => nameContainer.current.innerHTML.trim() === '' ? setName(user.email.split('@')[0]) : true;
+
+  const handleSignOut = () => {
+    firebase.doSignOut();
+    history.push('/');
+    toast.success('Wylogowano!', toastData);
+  }
+
+  return user ? (
+    <Content>
+      <label>Nazwa</label>
+      <ContentEditable
+        innerRef={nameContainer}
+        html={name}
+        disabled={false}
+        onChange={handleName} 
+        onBlur={fixName}
+        spellCheck={false}
+      />
+      <label>E-mail</label>
+      <div>{user.email}</div>
+      <button onClick={handleSignOut}>Wyloguj</button>
+    </Content>
+  ) : null;
 }
 const Password = ({firebase, user}) => {
-  return null;
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+
+  const handleOldPassword = (event) => setOldPassword(event.target.value.trim());
+  const handleNewPassword = (event) => setNewPassword(event.target.value.trim());
+  const handleRepeatPassword = (event) => setRepeatPassword(event.target.value.trim());
+
+  const handleSubmit = (event) => {
+    if (oldPassword !== '' && newPassword !== '' && repeatPassword !== '' && 
+        newPassword === repeatPassword && newPassword.length >= 6) {
+      user.reauthenticateWithCredential(firebase.emailAuthProvider.credential(user.email, oldPassword))
+        .then(() => {
+          user.updatePassword(newPassword)
+            .then(() => {
+              toast.success('Zmieniono hasło', toastData)
+            })
+            .catch(() => {
+              toast.error('Nie udało się zmienić hasła', toastData)
+            });
+        })
+        .catch(() => {
+          toast.error('Wprowadzono błędne hasło', toastData)
+        })
+    } else {
+      toast.error('Nowe hasło musi składać się z przynajmniej 6 znaków', toastData)
+    }
+  }
+
+  return user ? (
+    <Content>
+      <label>Zmień hasło</label>
+      <small>Stare hasło</small>
+      <input
+        type="password"
+        onChange={handleOldPassword}
+        value={oldPassword}
+      />
+      <small>Nowe hasło</small>
+      <input
+        type="password"
+        onChange={handleNewPassword}
+        value={newPassword}
+      />
+      <small>Powtórz hasło</small>
+      <input
+        type="password"
+        onChange={handleRepeatPassword}
+        value={repeatPassword}
+      />
+      <button
+        disabled={oldPassword === '' || newPassword === '' || repeatPassword === '' || newPassword !== repeatPassword}
+        onClick={handleSubmit}
+      >Zmień</button>
+    </Content>
+  ) : null;
 }
 const Data = ({firebase, user}) => {
   return null;
@@ -68,7 +237,7 @@ const Account = () => {
   const firebase = useContext(FirebaseContext);
   const user = useContext(AuthUserContext);
 
-  const [selected, setSelected] = useState('general');
+  const [selected, setSelected] = useState('password');
 
   return (
     <Wrapper>
