@@ -24,6 +24,7 @@ const App = () => (
       <Content>
         <Switch>
           <Route exact path={ROUTES.home} component={SignIn} />
+          
           <Route exact path={ROUTES.user} component={Account} />
         </Switch>
       </Content>

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FirebaseContext } from '../../components/Firebase';
 import history from '../../components/History';
 import { toast } from 'react-toastify';
-import { AuthUserContext } from '../../components/Session';
+import { AuthUserContext, withAuthorization } from '../../components/Session';
 import ContentEditable from 'react-contenteditable'
 
 const Wrapper = styled.div`
@@ -188,6 +188,9 @@ const Password = ({firebase, user}) => {
           user.updatePassword(newPassword)
             .then(() => {
               toast.success('Zmieniono hasło', toastData)
+              setOldPassword('');
+              setNewPassword('');
+              setRepeatPassword('');
             })
             .catch(() => {
               toast.error('Nie udało się zmienić hasła', toastData)
@@ -237,7 +240,7 @@ const Account = () => {
   const firebase = useContext(FirebaseContext);
   const user = useContext(AuthUserContext);
 
-  const [selected, setSelected] = useState('password');
+  const [selected, setSelected] = useState('general');
 
   return (
     <Wrapper>
@@ -258,4 +261,6 @@ const Account = () => {
   );
 }
 
-export default Account;
+const condition = user => !!user;
+
+export default withAuthorization(condition)(Account);
