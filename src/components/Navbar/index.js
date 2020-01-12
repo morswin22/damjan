@@ -40,8 +40,6 @@ const Styled = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  margin: 0 2rem 0 4rem!important;
-
   display: inline-block;
   
   display: flex;

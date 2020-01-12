@@ -162,7 +162,7 @@ const General = ({firebase, user}) => {
       }, 500);
       return () => clearTimeout(timeout);
     }
-  }, [name]);
+  }, [name, firebase, user.uid]);
 
   const handleSignOut = () => {
     firebase.doSignOut();
