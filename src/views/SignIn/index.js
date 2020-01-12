@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FirebaseContext } from '../../components/Firebase';
 import history from '../../components/History';
 import { toast } from 'react-toastify';
+import { ROUTES } from '../../utils/routes';
 
 const Form = styled.form`
   height: 100%;
@@ -55,7 +56,7 @@ const SignIn = () => {
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         // reset state? 
-        history.push('/actions')
+        history.push(ROUTES.actions);
       })
       .catch(() => {
         toast.error('Błędne dane logowania', {

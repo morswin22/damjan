@@ -38,7 +38,8 @@ class Firebase {
 
   user = uid => this.db.ref(`users/${uid}`);
 
-  // users = () => this.db.ref('users'); TODO: do i need this?
+  action = (uid, aid) => this.db.ref(`users/${uid}/actions/${aid}`);
+  actions = uid => this.db.ref(`users/${uid}/actions/`);
 }
 
 export default Firebase;

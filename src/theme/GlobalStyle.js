@@ -64,6 +64,17 @@ body {
   }
 }
 
+@keyframes slide-fwd-center {
+  0% {
+    transform: scale(.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .toast {
   font-size: 1.8rem;
   font-family: 'Montserrat', sans-serif!important;
