@@ -15,6 +15,8 @@ import SignIn from './views/SignIn';
 import Account from './views/Account';
 import Actions from './views/Actions';
 import NewAction from './views/NewAction';
+import Action from './views/Action';
+import NewSurvey from './views/NewSurvey';
 
 toast.configure()
 
@@ -28,6 +30,8 @@ const App = () => (
           <Route exact path={ROUTES.home} component={SignIn} />
           <Route exact path={ROUTES.actions} component={Actions} />
           <Route exact path={ROUTES.newAction} component={NewAction} />
+          <Route exact path={ROUTES.action} component={Action} />
+          <Route exact path={ROUTES.newSurvey} component={NewSurvey} />
           <Route exact path={ROUTES.user} component={Account} />
         </Switch>
       </Content>

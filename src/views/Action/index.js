@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import history from '../../components/History';
 // import { FirebaseContext } from '../../components/Firebase';
 import { AuthUserContext, withAuthorization } from '../../components/Session';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ROUTES } from '../../utils/routes';
 
 const Wrapper = styled.div`
@@ -38,9 +38,9 @@ const CardWrapper = styled.div`
   justify-items: center;
 `;
 
-const Card = styled(Link)`
+const CardList = styled(Link)`
   width: 30rem;
-  height: 16.5rem;
+  height: 20rem;
   background-color: #303030;
   border-radius: 1.2rem;
   text-align: center;
@@ -48,42 +48,57 @@ const Card = styled(Link)`
 `;
 
 const Title = styled.div`
-  height: 11rem;
-  padding: 1rem;
-  font-weight: 500;
+  line-height: 5.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
+  font-size: 2rem;
+  font-weight: 500;
   overflow: hidden;
 `;
 
-const Date = styled.div`
+const Item = styled.div`
   font-size: 1.8rem;
-  line-height: 5.5rem;
+  line-height: 3.5rem;
   overflow: hidden;
 `;
 
-const Actions = () => {
+const Action = () => {
   const user = useContext(AuthUserContext);
 
-  return user ? (
-    <Wrapper>
-      <ActionButton onClick={()=>{history.push(ROUTES.newAction)}}>Nowa akcja</ActionButton>
-      <CardWrapper>
-        {user.actions ? user.actions.map(
-          (action, id) => (
-            <Card to={`/akcja/${id}`} key={id} delay={id}>
-              <Title>{action.name}</Title>
-              <Date>{action.date}</Date>
-            </Card>
-          )
-        ) : null}
-      </CardWrapper>
-    </Wrapper>
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (user && (!user.actions || !user.actions[id])) history.push(ROUTES.actions);
+  }, [id, user]);
+
+  const handleSurveySelect = (event) => {
+    console.log(event.target.delay);
+  }
+
+  return user && user.actions && user.actions[id] ? (
+    user.actions[id].survey === false ? (
+      <Wrapper>
+        <ActionButton onClick={()=>{history.push(ROUTES.newSurvey)}}>Nowa ankieta</ActionButton>
+        <CardWrapper>
+          {user.surveys ? user.surveys.map(
+            (survey, id) => (
+              <CardList onClick={handleSurveySelect} key={id} delay={id}>
+                <Title>{survey.name}</Title>
+                {survey.elements.map((value, key)=>(
+                  <Item key={key}>{value}</Item>
+                ))}
+              </CardList>
+            )
+          ) : null}
+        </CardWrapper>
+      </Wrapper>
+    ) : (
+      <>ok</>
+    )
   ) : null;
 }
 
 const condition = user => !!user;
 
-export default withAuthorization(condition)(Actions);
+export default withAuthorization(condition)(Action);

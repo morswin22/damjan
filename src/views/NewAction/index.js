@@ -60,7 +60,8 @@ const NewAction = () => {
         actions.push({
           name,
           date,
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          survey: false
         });
         firebase.actions(user.uid).update(actions);
         history.push(ROUTES.actions);
