@@ -133,6 +133,10 @@ const Content = styled.div`
       }
     }
   }
+  small.info {
+    display: block;
+    margin: 2rem 0 2rem;
+  }
 `;
 
 const toastData = {
@@ -158,7 +162,7 @@ const General = ({firebase, user}) => {
       isInitialMount.current = false;
     } else {
       let timeout = setTimeout(()=>{
-        if (name !== '') firebase.user(user.uid).set({ name });
+        if (name !== '') firebase.user(user.uid).update({ name });
       }, 500);
       return () => clearTimeout(timeout);
     }
@@ -249,11 +253,17 @@ const Password = ({firebase, user}) => {
   ) : null;
 }
 const Data = ({firebase, user}) => {
-  firebase.user(user.uid).on('value', snapshot => {
-    console.log(snapshot.val())
-  })
 
-  return null;
+  const getDate = timestamp => {
+    const date = new Date(timestamp);
+    return `${("0" + date.getDate()).slice(-2)}.${("0" + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+  }
+
+  return user ? (
+    <Content>
+      <small className='info'>Konto utworzono: {getDate(user.timestamp)}</small>
+    </Content>
+  ) : null;
 }
 
 const Account = () => {

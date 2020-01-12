@@ -35,6 +35,7 @@ export const withAuthentication = Component => {
                 // First Login (setup account on database)
                 ref.set({
                   name: authUser.email.split('@')[0],
+                  timestamp: Date.now()
                 });
               }
             });
