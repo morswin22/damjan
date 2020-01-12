@@ -1,10 +1,15 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { FirebaseContext } from '../../components/Firebase';
 import history from '../../components/History';
 import { toast } from 'react-toastify';
 import { AuthUserContext, withAuthorization } from '../../components/Session';
 import ContentEditable from 'react-contenteditable'
+
+const stripHTML = html => {
+  let doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || '';
+}
 
 const Wrapper = styled.div`
   display: flex;
@@ -142,11 +147,22 @@ const toastData = {
 
 const General = ({firebase, user}) => {
   const nameContainer = useRef(null);
-  const [name, setName] = useState('user.name');
+  const [name, setName] = useState(user.name)
 
-  // TODO: change in firebase for both
-  const handleName = (event) => setName(event.target.value.trim());
+  const handleName = (event) => setName(stripHTML(event.target.value).trim());
   const fixName = () => nameContainer.current.innerHTML.trim() === '' ? setName(user.email.split('@')[0]) : true;
+
+  const isInitialMount = useRef(true);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      let timeout = setTimeout(()=>{
+        if (name !== '') firebase.user(user.uid).set({ name });
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [name]);
 
   const handleSignOut = () => {
     firebase.doSignOut();
@@ -183,9 +199,9 @@ const Password = ({firebase, user}) => {
   const handleSubmit = (event) => {
     if (oldPassword !== '' && newPassword !== '' && repeatPassword !== '' && 
         newPassword === repeatPassword && newPassword.length >= 6) {
-      user.reauthenticateWithCredential(firebase.emailAuthProvider.credential(user.email, oldPassword))
+      firebase.auth.currentUser.reauthenticateWithCredential(firebase.emailAuthProvider.credential(user.email, oldPassword))
         .then(() => {
-          user.updatePassword(newPassword)
+          firebase.auth.currentUser.updatePassword(newPassword)
             .then(() => {
               toast.success('Zmieniono hasło', toastData)
               setOldPassword('');
@@ -233,6 +249,10 @@ const Password = ({firebase, user}) => {
   ) : null;
 }
 const Data = ({firebase, user}) => {
+  firebase.user(user.uid).on('value', snapshot => {
+    console.log(snapshot.val())
+  })
+
   return null;
 }
 
@@ -242,7 +262,7 @@ const Account = () => {
 
   const [selected, setSelected] = useState('general');
 
-  return (
+  return user ? (
     <Wrapper>
       <Window>
         <Title>Ustawienia konta</Title>
@@ -258,7 +278,7 @@ const Account = () => {
         </Body>
       </Window>
     </Wrapper>
-  );
+  ) : null;
 }
 
 const condition = user => !!user;

@@ -64,7 +64,7 @@ const Navbar = () => {
       <Link to={ROUTES.surveys}>Ankiety</Link>
       <Link to={ROUTES.templates}>Szablony</Link>
       <StyledLink to={ROUTES.user}>
-        user.name
+        {user.name}
         <img src={profile} alt="" />
       </StyledLink>
     </Styled>

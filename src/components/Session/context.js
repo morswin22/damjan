@@ -17,9 +17,30 @@ export const withAuthentication = Component => {
     componentDidMount() {
       this.listener = this.props.firebase.auth.onAuthStateChanged(
         authUser => {
-          authUser
-            ? this.setState({ authUser })
-            : this.setState({ authUser: null }); console.log(authUser)
+          if (authUser) {
+            const ref = this.props.firebase.user(authUser.uid);
+            ref.on('value', snapshot => {
+              const dbUser = snapshot.val();
+
+              if (dbUser !== null) {
+                // Merge user from auth and db
+                authUser = {
+                  uid: authUser.uid,
+                  email: authUser.email,
+                  ...dbUser,
+                };
+
+                this.setState({ authUser });
+              } else {
+                // First Login (setup account on database)
+                ref.set({
+                  name: authUser.email.split('@')[0],
+                });
+              }
+            });
+          } else {
+            this.setState({ authUser: null });
+          }
         },
       );
     }
