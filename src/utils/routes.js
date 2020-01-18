@@ -2,10 +2,12 @@ export const ROUTES = {
     home: '/',
     actions: '/akcje',
     newAction: '/nowa-akcja',
-    action: '/akcja/:id',
+    action: '/akcja/:aid',
     surveys: '/ankiety',
     newSurvey: '/nowa-ankieta',
-    survey: '/ankieta/:id',
+    survey: '/ankieta/:sid',
+    publicSurvey: '/formularz/:pid',
+    publicSurveySuccess: '/formularz/:pid/sukces',
     templates: '/szablony',
-    user: '/konto'
+    user: '/konto',
 };

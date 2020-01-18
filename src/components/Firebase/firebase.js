@@ -43,6 +43,9 @@ class Firebase {
 
   survey = (uid, sid) => this.db.ref(`users/${uid}/survey/${sid}`);
   surveys = uid => this.db.ref(`users/${uid}/surveys/`);
+
+  publicSurvey = pid => this.db.ref(`surveys/${pid}`); 
+  publicSurveys = () => this.db.ref(`surveys/`);
 }
 
 export default Firebase;

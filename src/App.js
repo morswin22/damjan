@@ -17,6 +17,8 @@ import Actions from './views/Actions';
 import NewAction from './views/NewAction';
 import Action from './views/Action';
 import NewSurvey from './views/NewSurvey';
+import SurveyForm from './views/SurveyForm';
+import SurveyFormSuccess from './views/SurveyFormSuccess';
 
 toast.configure()
 
@@ -32,6 +34,8 @@ const App = () => (
           <Route exact path={ROUTES.newAction} component={NewAction} />
           <Route exact path={ROUTES.action} component={Action} />
           <Route exact path={ROUTES.newSurvey} component={NewSurvey} />
+          <Route exact path={ROUTES.publicSurvey} component={SurveyForm} />
+          <Route exact path={ROUTES.publicSurveySuccess} component={SurveyFormSuccess} />
           <Route exact path={ROUTES.user} component={Account} />
         </Switch>
       </Content>

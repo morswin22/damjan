@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import history from '../../components/History';
 import { FirebaseContext } from '../../components/Firebase';
 import { AuthUserContext, withAuthorization } from '../../components/Session';
-import { ROUTES } from '../../utils/routes';
 
 import plus from '../../assets/plus.png';
+import remove from '../../assets/remove.png';
 
 const Form = styled.form`
   height: 100%;
@@ -33,27 +33,6 @@ const Form = styled.form`
       font-size: 2.4rem;
     }
 
-    &.list-item {
-      animation: scale-up-ver-center 300ms cubic-bezier(0.250, 0.460, 0.450, 0.940) both!important;
-
-      @keyframes scale-up-ver-center {
-        0% {
-          margin: 0rem 1rem;
-          height: 0rem;
-          padding: 0rem 1.2rem;
-        }
-        100% {
-          margin: 1rem 1rem;
-          height: 7rem;
-          padding: 1.2rem 1.2rem;
-        }
-      }
-
-      ::after {
-        content: 'hej';
-      }
-    }
-
     &[type=submit] {
       background: #6C833A;
       font-weight: 500;
@@ -65,13 +44,51 @@ const Form = styled.form`
     }
   }
 
-  div {
+  & > div {
     display: flex;
     align-items: flex-end;
     flex-direction: column;
 
     &:last-of-type {
     align-items: flex-start;
+    }
+  }
+`;
+
+const Item = styled.div`
+  position: relative;
+  width: 31.3rem;
+
+  img {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: 3.3rem;
+    height: 3.3rem;
+    cursor: pointer;
+    background-image: url(${remove});
+  }
+
+  &:hover img {
+    display: block;
+  }
+
+  input {
+    animation: scale-up-ver-center 300ms cubic-bezier(0.250, 0.460, 0.450, 0.940) both!important;
+
+    @keyframes scale-up-ver-center {
+      0% {
+        margin: 0rem 1rem;
+        height: 0rem;
+        padding: 0rem 1.2rem;
+      }
+      100% {
+        margin: 1rem 1rem;
+        height: 7rem;
+        padding: 1.2rem 1.2rem;
+      }
     }
   }
 `;
@@ -120,28 +137,63 @@ const NewSurvey = () => {
     }
     return array;
   }
+  const removeElement = (elements, id) => {
+    elements.delete(id);
+    const iterator = elements[Symbol.iterator](), map = new Map();
+    let i = 0;
+    for (let item of iterator) {
+      map.set(`${i}`, item[1]);
+      i++;
+    }
+    return map;
+  }
   const handleElements = (event) => {
     event.persist();
     setElements(prevState => new Map(prevState).set(event.target.name, event.target.value));
   };
 
   const handleAddButton = (event) => setElements(prevState => new Map(prevState).set(`${prevState.size}`,""));
+  const handleRemoveButton = (event) => {
+    event.persist();
+    setElements(prevState => new Map(removeElement(prevState, event.target.name)));
+  };
+
+  const uuidv4 = () => {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => // eslint-disable-next-line
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+  }
+
+  const doDisplayName = true;
 
   const handleSubmit = (event) => {
+    event.preventDefault();
+    const publicId = uuidv4(); // TODO: check in publicSurveys whether its avaible
+    const readyElements = getElements(elements)
     firebase.surveys(user.uid).once('value')
       .then(snapshot => {
         const surveys = snapshot.val() || [];
         surveys.push({
           name,
           count,
-          elements: getElements(elements),
+          publicId,
+          elements: readyElements,
           finished: false,
           timestamp: Date.now(),
         });
         firebase.surveys(user.uid).update(surveys);
-        history.push(ROUTES.actions); // redirect back !
-      })
-    event.preventDefault();
+        history.goBack();
+      });
+    firebase.publicSurveys().once('value')
+      .then(snapshot => {
+        const publicSurveys = snapshot.val() || {};
+        const surveyData = {
+          elements: readyElements
+        };
+        if (doDisplayName) surveyData.name = name;
+        publicSurveys[publicId] = surveyData;
+        firebase.publicSurveys().update(publicSurveys);
+      });
   }
 
   return user ? (
@@ -162,20 +214,26 @@ const NewSurvey = () => {
         <input 
           type="submit" 
           value="Utwórz"
-          disabled={name === '' || count === ''}
+          disabled={name === '' || count === '' || getElements(elements).reduce((prev, current) => current === '' ? true : prev, false)}
         />
       </div>
       <div>
         {getElements(elements).map((value, index)=>(
-          <input 
-            type="text" 
-            key={index}
-            name={index}
-            className="list-item"
-            onChange={handleElements}
-            value={value}
-            placeholder="Element"
-          />
+          <Item key={index}>
+            <input 
+              type="text" 
+              name={index}
+              onChange={handleElements}
+              value={value}
+              placeholder="Element"
+            />
+            <img 
+              src={remove} 
+              alt='X'
+              onClick={handleRemoveButton} 
+              name={index} 
+            />
+          </Item>
         ))}
         <AddButton type="button" onClick={handleAddButton} />
       </div>
