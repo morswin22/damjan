@@ -1,10 +1,13 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import history from 'components/History';
 import { FirebaseContext } from 'components/Firebase';
 import { AuthUserContext, withAuthorization } from 'components/Session';
 import { /* Link, */ useParams } from 'react-router-dom';
 import { ROUTES } from 'utils/routes';
+import arrowLeft from 'assets/arrowLeft.png';
+import arrowRight from 'assets/arrowRight.png';
+import { toast } from 'react-toastify';
 
 const SurveysWrapper = styled.div`
   height: 100%;
@@ -92,10 +95,66 @@ const Hyperlink = styled.div`
   padding: 0 2rem;
 `;
 
-const Data = styled.div`
+const NoData = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+const Data = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 12rem auto 12rem;
+`;
+
+const ArrowButton = styled.img`
+  cursor: pointer;
+  align-self: center;
+  justify-self: center;
+`;
+
+const Entries = styled.div`
+  display: flex;
+  overflow: hidden;
+
+  & > div:first-child {
+    transition: margin-left 500ms ease-in-out;
+    margin-left: ${({ showing }) => `-${showing * 100}%`};
+  }
+`;
+const Entry = styled.div`
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+`;
+const EntryItem = styled.div`
+  margin: 1rem;
+
+  span {
+    font-weight: 500;
+  }
+`;
+
+const RemoveEntryButton = styled.button`
+  margin: 1rem;
+  width: 12rem;
+  height: 4rem;
+  border: 2px solid #A63838;
+  border-radius: .8rem;
+  background-color: transparent;
+  color: #c65353;
+  font-size: 1.8rem;
+  font-weight: 500;
+  justify-self: center;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 200ms ease-in-out;
+    color: #fff;
+    background-color: #A63838;
+  }
 `;
 
 const ProgressBar = styled.div`
@@ -114,6 +173,7 @@ const ProgressBar = styled.div`
     width: ${(props) => `${props.value*100/props.max}%`};
     background-color: #6C833A;
     border-radius: 1.2rem;
+    transition: width 500ms ease-in-out;
   }
 
   &::after {
@@ -143,24 +203,87 @@ const Action = () => {
   const user = useContext(AuthUserContext);
   const firebase = useContext(FirebaseContext);
 
-  console.log(firebase);
-
   const { aid } = useParams();
 
+  const [entriesCount, setEntriesCount] = useState(0);
+  const [entries, setEntries] = useState(null);
+  const [showingEntry, setShowingEntry] = useState(0);
+
   useEffect(() => {
-    if (user && (!user.actions || !user.actions[aid])) {
-      history.push(ROUTES.actions);
-      return;
+    if (user) {
+      if (!user.actions || !user.actions[aid]) {
+        history.push(ROUTES.actions);
+        return;
+      }
+      if ((!user.surveys || !user.surveys[user.actions[aid].survey]) && user.actions[aid].survey !== false) {
+        firebase.action(user.uid, user.actions[aid].survey).update({survey: false});
+        return;
+      }
+      if (user.surveys && user.actions[aid].survey !== false && user.surveys[user.actions[aid].survey]) {
+        if (user.surveys[user.actions[aid].survey].finished === false) {
+          const pid = user.surveys[user.actions[aid].survey].publicId;
+          firebase.publicSurvey(pid).on('value', snapshot => {
+            const publicSurvey = snapshot.val();
+            if (publicSurvey && publicSurvey.entries) {
+              setEntriesCount(Object.values(publicSurvey.entries).length);
+              const entries = [];
+              for (let key in publicSurvey.entries) entries.push({...publicSurvey.entries[key], _key: key});
+              setEntries(entries);
+            } else {
+              setEntriesCount(0);
+              setEntries(null);
+            }
+          });
+        } else {
+          // finished === true
+        }
+      }
     }
-    if (user && (!user.surveys || !user.surveys[user.actions[aid].survey]) && user.actions[aid].survey !== false) {
-      firebase.action(user.uid, user.actions[aid].survey).update({survey: false});
-      return;
-    }
+    
   }, [aid, user, firebase]);
 
   const handleSurveySelect = sid => {
     firebase.action(user.uid, aid).update({survey: sid});
   }
+
+  const handleEndButton = event => { 
+    const publicSurveyRef = firebase.publicSurvey(user.surveys[user.actions[aid].survey].publicId);
+    publicSurveyRef.once('value')
+      .then(snapshot => {
+        const publicSurvey = snapshot.val();
+        const data = { finished: true };
+        if (publicSurvey && publicSurvey.entries) data.entries = publicSurvey.entries;
+        firebase.survey(user.uid, user.actions[aid].survey).update(data)
+          .then(()=>{
+            publicSurveyRef.remove();
+          });
+      });
+  }
+
+  const handleArrowButton = direction => {
+    let next = showingEntry + direction;
+    if (next >= entriesCount) next = entriesCount - 1;
+    if (next < 0) next = 0;
+    setShowingEntry(next);
+  }
+
+  const handleRemoveEntry = (pid, eid) => {
+    firebase.publicSurvey(pid).child(`entries/${eid}`).remove()
+      .then(()=>{
+        toast.success('Usunięto wpis', {
+          className: 'toast',
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+        });
+      });
+  } 
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(()=>handleArrowButton(0), [entriesCount]);
 
   return user && user.actions && user.actions[aid] ? (
     user.actions[aid].survey === false ? (
@@ -186,10 +309,41 @@ const Action = () => {
             <Info>Oczekiwanie na zakończenie ankiety...</Info>
             <Box>
               <Hyperlink>https://plemiona.netlify.com/formularz/{user.surveys[user.actions[aid].survey].publicId}</Hyperlink>
-              <Data>...</Data>
-              <ProgressBar value={0} max={user.surveys[user.actions[aid].survey].count} />
+              {entries ? (
+              <Data>
+                <ArrowButton
+                  src={arrowLeft}
+                  alt="<"
+                  onClick={() => handleArrowButton(-1)}
+                />
+                <Entries showing={showingEntry}>
+                {entries.map(entry => (
+                  <Entry key={entry._key}>
+                    {Object.keys(entry).map((key, index) => key !== '_key' ? (
+                      <EntryItem key={index}>
+                        <span>{key}</span>: {entry[key]}
+                      </EntryItem>
+                    ) : null)}
+                    <RemoveEntryButton onClick={()=>handleRemoveEntry(user.surveys[user.actions[aid].survey].publicId, entry._key)} >
+                      Usuń wpis
+                    </RemoveEntryButton>
+                  </Entry>  
+                ))}
+                </Entries>
+                <ArrowButton
+                  src={arrowRight}
+                  alt=">"
+                  onClick={() => handleArrowButton(1)}
+                />
+              </Data>
+              ) : (
+              <NoData>
+                Brak wpisów
+              </NoData>
+              )}
+              <ProgressBar value={entriesCount} max={user.surveys[user.actions[aid].survey].count} />
             </Box>
-            <EndButton>Zakończ teraz</EndButton>
+            <EndButton onClick={handleEndButton}>Zakończ teraz</EndButton>
           </SurveyLoadingWrapper>
         ) : (
           <>survey done</>

@@ -41,7 +41,7 @@ class Firebase {
   action = (uid, aid) => this.db.ref(`users/${uid}/actions/${aid}`);
   actions = uid => this.db.ref(`users/${uid}/actions/`);
 
-  survey = (uid, sid) => this.db.ref(`users/${uid}/survey/${sid}`);
+  survey = (uid, sid) => this.db.ref(`users/${uid}/surveys/${sid}`);
   surveys = uid => this.db.ref(`users/${uid}/surveys/`);
 
   publicSurvey = pid => this.db.ref(`surveys/${pid}`); 

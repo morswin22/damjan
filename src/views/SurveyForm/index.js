@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import history from 'components/History';
 import { FirebaseContext } from 'components/Firebase';
 import loading from 'assets/loading.gif';
+import { toast } from 'react-toastify';
 
 const Wrapper = styled.form`
   display: flex;
@@ -125,8 +126,25 @@ const SurveyForm = () => {
     event.preventDefault();
     const formatted = {};
     for (let element of getElements(entries)) formatted[element[0]] = element[1];
-    firebase.publicSurvey(pid).child(`entries/${uuidv4()}`).set(formatted)
-      .then(() => history.push(`/formularz/${pid}/sukces`));
+    const ref = firebase.publicSurvey(pid);
+    ref.once('value')
+      .then(snapshot => {
+        const publicSurvey = snapshot.val();
+        if (!publicSurvey.entries || Object.values(publicSurvey.entries).length < parseInt(publicSurvey.count)) {
+          ref.child(`entries/${uuidv4()}`).set(formatted)
+            .then(() => history.push(`/formularz/${pid}/sukces`));
+        } else {
+          toast.error('Przekroczono liczbę wpisów do tej ankiety', {
+            className: 'toast',
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
+        }
+      });
   }
 
   return survey !== undefined ? (

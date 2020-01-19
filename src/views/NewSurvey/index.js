@@ -187,6 +187,7 @@ const NewSurvey = () => {
       .then(snapshot => {
         const publicSurveys = snapshot.val() || {};
         const surveyData = {
+          count,
           elements: readyElements
         };
         if (doDisplayName) surveyData.name = name;
