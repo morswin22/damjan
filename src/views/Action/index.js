@@ -8,6 +8,7 @@ import { ROUTES } from 'utils/routes';
 import arrowLeft from 'assets/arrowLeft.png';
 import arrowRight from 'assets/arrowRight.png';
 import { toast } from 'react-toastify';
+import XLSX from 'xlsx';
 
 const SurveysWrapper = styled.div`
   height: 100%;
@@ -199,6 +200,8 @@ const EndButton = styled.button`
   cursor: pointer;
 `;
 
+const DownloadButton = styled.button``;
+
 const Action = () => {
   const user = useContext(AuthUserContext);
   const firebase = useContext(FirebaseContext);
@@ -285,6 +288,37 @@ const Action = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(()=>handleArrowButton(0), [entriesCount]);
 
+  const handleDownloadButton = event => {
+    firebase.survey(user.uid, user.actions[aid].survey).once('value')
+      .then(snapshot => {
+        const survey = snapshot.val();
+        if (survey.entries) {
+          const header = [];
+          for (let eid in survey.entries) {
+            for (let key in survey.entries[eid]) {
+              header.push(key); 
+            }
+            break;
+          }
+          const data = [header];
+          for (let eid in survey.entries) {
+            const row = [];
+            for (let key in survey.entries[eid]) {
+              row.push(survey.entries[eid][key]);
+            }
+            data.push(row);
+          }
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(
+            workbook, 
+            XLSX.utils.aoa_to_sheet(data), 
+            'Wyniki ankiety'
+          );
+          XLSX.writeFile(workbook, `${survey.name}.xlsx`);
+        }
+      });
+  }
+
   return user && user.actions && user.actions[aid] ? (
     user.actions[aid].survey === false ? (
       <SurveysWrapper>
@@ -346,7 +380,12 @@ const Action = () => {
             <EndButton onClick={handleEndButton}>Zakończ teraz</EndButton>
           </SurveyLoadingWrapper>
         ) : (
-          <>survey done</>
+          <>
+            survey done
+            <DownloadButton onClick={handleDownloadButton}>
+              Pobierz wyniki ankiety (.xlsx)
+            </DownloadButton>
+          </>
         )
       ) : null
     )
