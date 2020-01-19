@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { FirebaseContext } from '../../components/Firebase';
-import history from '../../components/History';
+import { FirebaseContext } from 'components/Firebase';
+import history from 'components/History';
 import { toast } from 'react-toastify';
-import { ROUTES } from '../../utils/routes';
+import { ROUTES } from 'utils/routes';
 
 const Form = styled.form`
   height: 100%;

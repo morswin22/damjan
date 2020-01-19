@@ -1,9 +1,9 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { FirebaseContext } from '../../components/Firebase';
-import history from '../../components/History';
+import { FirebaseContext } from 'components/Firebase';
+import history from 'components/History';
 import { toast } from 'react-toastify';
-import { AuthUserContext, withAuthorization } from '../../components/Session';
+import { AuthUserContext, withAuthorization } from 'components/Session';
 import ContentEditable from 'react-contenteditable'
 
 const stripHTML = html => {

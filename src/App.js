@@ -1,24 +1,24 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { theme } from './theme/theme';
-import GlobalStyle from './theme/GlobalStyle';
+import { theme } from 'theme/theme';
+import GlobalStyle from 'theme/GlobalStyle';
 import { Router, Switch, Route } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { ROUTES } from './utils/routes';
-import history from './components/History';
-import { withAuthentication } from './components/Session';
-import Header from './components/Header';
-import Content from './components/Content';
+import { ROUTES } from 'utils/routes';
+import history from 'components/History';
+import { withAuthentication } from 'components/Session';
+import Header from 'components/Header';
+import Content from 'components/Content';
 
-import SignIn from './views/SignIn';
-import Account from './views/Account';
-import Actions from './views/Actions';
-import NewAction from './views/NewAction';
-import Action from './views/Action';
-import NewSurvey from './views/NewSurvey';
-import SurveyForm from './views/SurveyForm';
-import SurveyFormSuccess from './views/SurveyFormSuccess';
+import SignIn from 'views/SignIn';
+import Account from 'views/Account';
+import Actions from 'views/Actions';
+import NewAction from 'views/NewAction';
+import Action from 'views/Action';
+import NewSurvey from 'views/NewSurvey';
+import SurveyForm from 'views/SurveyForm';
+import SurveyFormSuccess from 'views/SurveyFormSuccess';
 
 toast.configure()
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Logo from '../Logo';
-import Navbar from '../Navbar';
+import Logo from 'components/Logo';
+import Navbar from 'components/Navbar';
 
 const Bar = styled.div`
   grid-area: header;

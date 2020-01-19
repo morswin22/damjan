@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../../utils/routes'
-import { AuthUserContext } from '../../components/Session';
+import { ROUTES } from 'utils/routes'
+import { AuthUserContext } from 'components/Session';
 
-import profile from '../../assets/profile.png';
+import profile from 'assets/profile.png';
 
 const Styled = styled.div`
 

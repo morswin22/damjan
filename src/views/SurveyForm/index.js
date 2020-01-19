@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import history from '../../components/History';
-import { FirebaseContext } from '../../components/Firebase';
-import loading from '../../assets/loading.gif';
+import history from 'components/History';
+import { FirebaseContext } from 'components/Firebase';
+import loading from 'assets/loading.gif';
 
 const Wrapper = styled.form`
   display: flex;

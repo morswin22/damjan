@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import history from '../../components/History';
+import history from 'components/History';
 // import { FirebaseContext } from '../../components/Firebase';
-import { AuthUserContext, withAuthorization } from '../../components/Session';
+import { AuthUserContext, withAuthorization } from 'components/Session';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../../utils/routes';
+import { ROUTES } from 'utils/routes';
 
 const Wrapper = styled.div`
   height: 100%;

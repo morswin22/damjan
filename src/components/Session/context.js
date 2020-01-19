@@ -1,8 +1,8 @@
 import React from 'react';
-import { withFirebase } from '../Firebase';
+import { withFirebase } from 'components/Firebase';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
-import { ROUTES } from '../../utils/routes';
+import { ROUTES } from 'utils/routes';
 
 const AuthUserContext = React.createContext(null);
 

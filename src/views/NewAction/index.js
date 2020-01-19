@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import history from '../../components/History';
-import { FirebaseContext } from '../../components/Firebase';
-import { AuthUserContext, withAuthorization } from '../../components/Session';
-import { ROUTES } from '../../utils/routes';
+import history from 'components/History';
+import { FirebaseContext } from 'components/Firebase';
+import { AuthUserContext, withAuthorization } from 'components/Session';
+import { ROUTES } from 'utils/routes';
 
 const Form = styled.form`
   height: 100%;

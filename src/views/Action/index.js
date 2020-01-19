@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import history from '../../components/History';
-import { FirebaseContext } from '../../components/Firebase';
-import { AuthUserContext, withAuthorization } from '../../components/Session';
-import { Link, useParams } from 'react-router-dom';
-import { ROUTES } from '../../utils/routes';
+import history from 'components/History';
+import { FirebaseContext } from 'components/Firebase';
+import { AuthUserContext, withAuthorization } from 'components/Session';
+import { /* Link, */ useParams } from 'react-router-dom';
+import { ROUTES } from 'utils/routes';
 
 const SurveysWrapper = styled.div`
   height: 100%;
@@ -187,7 +187,7 @@ const Action = () => {
             <Box>
               <Hyperlink>https://plemiona.netlify.com/formularz/{user.surveys[user.actions[aid].survey].publicId}</Hyperlink>
               <Data>...</Data>
-              <ProgressBar value={6} max={user.surveys[user.actions[aid].survey].count} />
+              <ProgressBar value={0} max={user.surveys[user.actions[aid].survey].count} />
             </Box>
             <EndButton>Zakończ teraz</EndButton>
           </SurveyLoadingWrapper>

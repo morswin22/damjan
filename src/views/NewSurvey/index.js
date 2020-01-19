@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import history from '../../components/History';
-import { FirebaseContext } from '../../components/Firebase';
-import { AuthUserContext, withAuthorization } from '../../components/Session';
-
-import plus from '../../assets/plus.png';
-import remove from '../../assets/remove.png';
+import history from 'components/History';
+import { FirebaseContext } from 'components/Firebase';
+import { AuthUserContext, withAuthorization } from 'components/Session';
+import plus from 'assets/plus.png';
+import remove from 'assets/remove.png';
 
 const Form = styled.form`
   height: 100%;
