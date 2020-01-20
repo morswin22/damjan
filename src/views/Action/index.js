@@ -294,16 +294,13 @@ const Action = () => {
         const survey = snapshot.val();
         if (survey.entries) {
           const header = [];
-          for (let eid in survey.entries) {
-            for (let key in survey.entries[eid]) {
-              header.push(key); 
-            }
-            break;
+          for (let key of user.surveys[user.actions[aid].survey].elements) {
+            header.push(key); 
           }
           const data = [header];
           for (let eid in survey.entries) {
             const row = [];
-            for (let key in survey.entries[eid]) {
+            for (let key of user.surveys[user.actions[aid].survey].elements) {
               row.push(survey.entries[eid][key]);
             }
             data.push(row);
@@ -353,11 +350,11 @@ const Action = () => {
                 <Entries showing={showingEntry}>
                 {entries.map(entry => (
                   <Entry key={entry._key}>
-                    {Object.keys(entry).map((key, index) => key !== '_key' ? (
+                    {user.surveys[user.actions[aid].survey].elements.map((key, index) => (
                       <EntryItem key={index}>
                         <span>{key}</span>: {entry[key]}
                       </EntryItem>
-                    ) : null)}
+                    ))}
                     <RemoveEntryButton onClick={()=>handleRemoveEntry(user.surveys[user.actions[aid].survey].publicId, entry._key)} >
                       Usuń wpis
                     </RemoveEntryButton>
