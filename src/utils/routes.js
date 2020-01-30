@@ -3,6 +3,7 @@ export const ROUTES = {
     actions: '/akcje',
     newAction: '/nowa-akcja',
     action: '/akcja/:aid',
+    strategies: '/akcja/:aid/strategie',
     surveys: '/ankiety',
     newSurvey: '/nowa-ankieta',
     survey: '/ankieta/:sid',

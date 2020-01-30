@@ -185,7 +185,9 @@ const Action = () => {
           </SurveyLoadingWrapper>
         ) : (
           <SurveyDoneWrapper>
-            <TargetsButton to={`${url}/cele`}>Dodaj cele</TargetsButton>
+            <TargetsButton to={`${url}/strategie`}>
+              { !user.actions[aid].targets || !user.actions[aid].fakes ? 'Dodaj cele' : 'Oblicz strategie' }
+            </TargetsButton>
             <SurveyBox 
               firebase={firebase} 
               user={user} 
